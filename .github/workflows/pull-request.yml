@@ -52,3 +52,9 @@ jobs:
           slug: steveski/HandyStuff
           files: '**/coverage.cobertura.xml'
           fail_ci_if_error: true
+
+coverage:
+  status:
+    project:
+      default:
+        target: 100%   # Require 80% overall coverage

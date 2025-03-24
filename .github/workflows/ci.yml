@@ -68,4 +68,10 @@ jobs:
         run: dotnet nuget push "path/to/your/package.nupkg" \
              --api-key ${{ secrets.MYGET_API_KEY }} \
              --source https://www.myget.org/F/your-feed/api/v3/index.json
+
+coverage:
+  status:
+    project:
+      default:
+        target: 100%   # Require 80% overall coverage
           
