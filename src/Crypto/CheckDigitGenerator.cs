@@ -1,4 +1,4 @@
-﻿namespace HandyStuff;
+﻿namespace Steveski.Crypto;
 
 using System.Text;
 

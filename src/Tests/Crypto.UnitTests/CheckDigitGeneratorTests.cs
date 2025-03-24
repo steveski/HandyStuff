@@ -1,4 +1,4 @@
-﻿namespace HandyStuff.UnitTests;
+﻿namespace Steveski.Crypto.UnitTests;
 
 using Shouldly;
 
@@ -19,7 +19,7 @@ public class CheckDigitGeneratorTests
         // Therefore ( ( '1' * 3) + ('2' * 1) + ('3' * 2) ) % 26 + 'A'
         //    Values ( ( 49 * 3) +  (50 * 1) +  (51 * 2) )  % 26 + 65
 
-        var expected = (char)((('1' * 3) + ('2' * 1) + ('3' * 2)) % 26 + 'A');
+        var expected = (char)(('1' * 3 + '2' * 1 + '3' * 2) % 26 + 'A');
         checkDigit.ShouldBe(expected);
     }
 
@@ -39,7 +39,7 @@ public class CheckDigitGeneratorTests
         // Therefore ( ( '1' * 4) + ('2' * 2) + ('3' * 1) + ('4' * 3 ) % 26 + 'A'
         //    Values ( ( 49 * 4) +  (50 * 2) +  (51 * 1) +  (52  * 3) )  % 26 + 65
 
-        var expected = (char)((('1' * 4) + ('2' * 2) + ('3' * 1) + ('4' * 3)) % 26 + 'A');
+        var expected = (char)(('1' * 4 + '2' * 2 + '3' * 1 + '4' * 3) % 26 + 'A');
         checkDigit.ShouldBe(expected);
     }
 
@@ -62,7 +62,7 @@ public class CheckDigitGeneratorTests
         // Therefore ( ( 'A' * 6 ) + ( 'B' * 4 ) + ( 'C' * 2 ) + ( '3' * 1 ) + ( '2' * 3 ) + ( '1' * 5 ) % 26 + 'A'
         //    Values ( ( 65 * 6 )  + ( 65 * 4 )  + ( 66 * 2 )  + ( 51  * 1 ) + ( 50  * 3 ) + ( 49  * 5 ) )  % 26 + 65
 
-        var expected = (char)((('A' * 6) + ('B' * 4) + ('C' * 2) + ('3' * 1) + ('2' * 3) + ('1' * 5)) % 26 + 'A');
+        var expected = (char)(('A' * 6 + 'B' * 4 + 'C' * 2 + '3' * 1 + '2' * 3 + '1' * 5) % 26 + 'A');
         checkDigit.ShouldBe(expected);
     }
 
@@ -75,13 +75,13 @@ public class CheckDigitGeneratorTests
         var checkDigit = sut.GenerateCheckDigit("ABC4321", weightingSequence);
 
         var expected = (char)((
-            ('A' * weightingSequence[0]) +
-            ('B' * weightingSequence[1]) +
-            ('C' * weightingSequence[2]) +
-            ('4' * weightingSequence[3]) +
-            ('3' * weightingSequence[4]) +
-            ('2' * weightingSequence[5]) +
-            ('1' * weightingSequence[6]))
+            'A' * weightingSequence[0] +
+            'B' * weightingSequence[1] +
+            'C' * weightingSequence[2] +
+            '4' * weightingSequence[3] +
+            '3' * weightingSequence[4] +
+            '2' * weightingSequence[5] +
+            '1' * weightingSequence[6])
             % 26 + 'A');
         checkDigit.ShouldBe(expected);
     }
