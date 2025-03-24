@@ -24,7 +24,7 @@ jobs:
           dotnet-version: 9.0.x
       
       - name: Setup GitVersion
-        uses: GitTools/actions@v3.1.11
+        uses: gittools/actions/gitversion/setup@v3.1.11
         with:
           #versionSpec: '5.x'
           useConfigFile: true
