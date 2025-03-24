@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <RootNamespace>au.steveski.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <PackageId>au.steveski.$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\HandyStuff\HandyStuff.csproj" />
+    <ProjectReference Include="..\..\Crypto\Crypto.csproj" />
   </ItemGroup>
 
 </Project>

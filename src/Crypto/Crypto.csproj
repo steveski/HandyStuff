@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RootNamespace>au.steveski.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <PackageId>au.steveski.$(AssemblyName)</PackageId>
   </PropertyGroup>
 
 </Project>
