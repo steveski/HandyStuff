@@ -50,6 +50,8 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: '**/coverage.opencover.xml'
+          fail_ci_if_error: true
           
 
       # Package and Publish
