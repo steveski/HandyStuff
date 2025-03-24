@@ -42,6 +42,9 @@ jobs:
         working-directory: src
         run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --logger "trx;LogFileName=test_results.trx"
 
+      - name: Find coverage files
+        run: find . -type f -name 'coverage.opencover.xml'
+
       - name: Upload Coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
