@@ -65,18 +65,25 @@ jobs:
           files: '**/coverage.cobertura.xml'
           fail_ci_if_error: true
           
-
-      # Package and Publish
       - name: Pack
         run: dotnet pack src/Crypto/Crypto.csproj --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.semVer }}
+
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: '**/*.nupkg'
+
 
   publish:
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push'  # Only publish on push, not PR
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
 
       - name: Upload to MyGet (pre-release only)
         if: needs.build.outputs.isPrerelease == 'true'
