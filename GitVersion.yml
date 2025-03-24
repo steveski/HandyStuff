@@ -3,6 +3,7 @@ branches:
   master:
     regex: ^master$|^main$
     is-release-branch: true
+    label: beta
   feature:
     regex: $feature$|^bugfix$
     increment: Minor
