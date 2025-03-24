@@ -4,8 +4,9 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>steveski.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <RootNamespace>Steveski.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <PackageId>Steveski.$(AssemblyName)</PackageId>
+	<SuppressImplicitFrameworkReferences>true</SuppressImplicitFrameworkReferences>
   </PropertyGroup>
 
 </Project>
