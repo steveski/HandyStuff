@@ -70,7 +70,11 @@ jobs:
           done
 
       - name: Publish to MyGet
-        run: dotnet nuget push $GITHUB_WORKSPACE/*.nupkg \
-             --api-key ${{ secrets.MYGET_API_KEY }} \
-             --source https://www.myget.org/F/your-feed/api/v3/index.json \
-             --skip-duplicate
+        run: |
+          find . -name '*.nupkg' -print | while read pkg; do
+            echo "Publishing $pkg"
+            dotnet nuget push "$pkg" \
+              --api-key ${{ secrets.MYGET_API_KEY }} \
+              --source https://www.myget.org/F/your-feed/api/v3/index.json \
+              --skip-duplicate
+          done             
