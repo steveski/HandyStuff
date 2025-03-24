@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 9.0.x
+      
+      - name: Setup GitVersion
+        uses: GitTools/actions@v3.1.11
+        with:
+          #versionSpec: '5.x'
+          useConfigFile: true
+
+      - name: Calculate version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v3.1.11
+
+      - name: Restore dependencies
+        working-directory: src
+        run: dotnet-restore
+
+      - name: Build
+        working-directory: src
+        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.NuGetVersion }}
+
+      - name: Test
+        working-directory: src
+        run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
+
+      # Package and Publish
+      - name: Pack
+        run: dotnet pack --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.NuGetVersion }}
+
+      - name: Publish to NuGet
+        run: dotnet nuget push "path/to/your/package.nupkg" \
+             --api-key ${{ secrets.NUGET_API_KEY }} \
+             --source https://api.nuget.org/v3/index.json
+
+      - name: Publish to MyGet
+        run: dotnet nuget push "path/to/your/package.nupkg" \
+             --api-key ${{ secrets.MYGET_API_KEY }} \
+             --source https://www.myget.org/F/your-feed/api/v3/index.json
+          

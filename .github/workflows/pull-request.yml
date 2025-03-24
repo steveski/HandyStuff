@@ -1,10 +1,10 @@
-name: CI
+name: Pull-Request
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
-    branches: [ main ]
+    types: [opened, synchronize, reopened]
+    branches:
+      - '*'
 
 jobs:
   build:
@@ -40,18 +40,3 @@ jobs:
       - name: Test
         working-directory: src
         run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
-
-      # Package and Publish
-      - name: Pack
-        run: dotnet pack --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.NuGetVersion }}
-
-      - name: Publish to NuGet
-        run: dotnet nuget push "path/to/your/package.nupkg" \
-             --api-key ${{ secrets.NUGET_API_KEY }} \
-             --source https://api.nuget.org/v3/index.json
-
-      - name: Publish to MyGet
-        run: dotnet nuget push "path/to/your/package.nupkg" \
-             --api-key ${{ secrets.MYGET_API_KEY }} \
-             --source https://www.myget.org/F/your-feed/api/v3/index.json
-          
