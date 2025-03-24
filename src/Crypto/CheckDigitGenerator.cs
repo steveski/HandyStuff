@@ -108,10 +108,10 @@ public class CheckDigitGenerator
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public bool TryIsCheckDigitValid(string input)
+    public bool TryIsCheckDigitValid(string input, int[]? weightingSequence = null)
     {
         var theString = input[..^1];
-        var checkDigit = GenerateCheckDigit(theString);
+        var checkDigit = GenerateCheckDigit(theString, weightingSequence);
 
         return input[^1] == checkDigit;
     }

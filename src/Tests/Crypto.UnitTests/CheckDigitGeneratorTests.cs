@@ -128,6 +128,33 @@ public class CheckDigitGeneratorTests
         isvalidCheckDigit.ShouldBe(expected);
     }
 
+    [Theory]
+    // These will match
+    [InlineData("ABC123U", "6,4,2,1,3,5", true)] // Generated with sequence "6,5,4,3,2,1"
+    [InlineData("ABC132S", "6,4,2,1,3,5", true)] // Generated with sequence "6,4,2,1,3,5"
+    [InlineData("ABC132G", "4,1,3,6,5,2", true)] // Generated with sequence "4,1,3,6,5,2"
+    
+    // These are checked with the wrong weighting sequence
+    [InlineData("ABC123U", "1,2,3,4,5,6", false)] // Generated with sequence "6,5,4,3,2,1"
+    [InlineData("ABC132S", "6,5,4,3,2,1", false)] // Generated with sequence "6,4,2,1,3,5"
+    [InlineData("ABC132G", "6,4,2,1,3,5", false)] // Generated with sequence "4,1,3,6,5,2"
+
+    // These are checked with the wrong check digit
+    [InlineData("ABC123G", "6,5,4,3,2,1", false)] // Generated with sequence "6,5,4,3,2,1"
+    [InlineData("ABC132F", "6,4,2,1,3,5", false)] // Generated with sequence "6,4,2,1,3,5"
+    [InlineData("ABC132H", "4,1,3,6,5,2", false)] // Generated with sequence "4,1,3,6,5,2"
+    public void TryIsCheckDigitValidWithSequenceProvidedReturnsExpected(string inputWithCheckDigit, string weightingSequenceString, bool expected)
+    {
+        int[] weightingSequence = weightingSequenceString
+            .Split(',')
+            .Select(int.Parse)
+            .ToArray();
+
+        var sut = new CheckDigitGenerator();
+        var isvalidCheckDigit = sut.TryIsCheckDigitValid(inputWithCheckDigit, weightingSequence);
+        isvalidCheckDigit.ShouldBe(expected);
+    }
+
     [Fact]
     public void NewRandomNumberSequenceWithCheckDigitReturnsIdWithCorrectCheckDigit()
     {
