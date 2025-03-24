@@ -19,7 +19,9 @@ jobs:
       - name: Setup up .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: |
+            9.0.x
+            8.0.x
       
       - name: Setup GitVersion
         uses: gittools/actions/gitversion/setup@v3.1.11
