@@ -13,7 +13,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.gitversion.outputs.semVer }}
+      isPrerelease: ${{ steps.isprerelease.outputs.result }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -34,14 +36,23 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v3.1.11
 
+      - name: Determine if version is pre-release
+        id: isprerelease
+        run: |
+          if [[ "${{ steps.gitversion.outputs.semVer }}" == *-* ]]; then
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Restore dependencies
         working-directory: src
         run: dotnet restore
 
       - name: Build
         working-directory: src
-        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.GitVersion_SemVer }}
-      
+        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
+
       - name: Test and Collect Coverage
         working-directory: src
         run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --logger "trx;LogFileName=test_results.trx"
@@ -57,24 +68,34 @@ jobs:
 
       # Package and Publish
       - name: Pack
-        run: dotnet pack src/Crypto/Crypto.csproj --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.GitVersion_SemVer }}
+        run: dotnet pack src/Crypto/Crypto.csproj --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.semVer }}
 
-      - name: Publish all NuGet packages
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'  # Only publish on push, not PR
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Upload to MyGet (pre-release only)
+        if: needs.build.outputs.isPrerelease == 'true'
         run: |
           find . -name '*.nupkg' -print | while read pkg; do
-            echo "Publishing $pkg"
+            echo "Publishing $pkg to MyGet"
+            dotnet nuget push "$pkg" \
+              --api-key ${{ secrets.MYGET_API_KEY }} \
+              --source https://www.myget.org/F/steveski-ci/api/v3/index.json \
+              --skip-duplicate
+          done
+
+      - name: Upload to NuGet (release only)
+        if: needs.build.outputs.isPrerelease == 'false'
+        run: |
+          find . -name '*.nupkg' -print | while read pkg; do
+            echo "Publishing $pkg to NuGet.org"
             dotnet nuget push "$pkg" \
               --api-key ${{ secrets.NUGET_API_KEY }} \
               --source https://api.nuget.org/v3/index.json \
               --skip-duplicate
           done
-
-      - name: Publish to MyGet
-        run: |
-          find . -name '*.nupkg' -print | while read pkg; do
-            echo "Publishing $pkg"
-            dotnet nuget push "$pkg" \
-              --api-key ${{ secrets.MYGET_API_KEY }} \
-              --source https://www.myget.org/F/steveski-ci/api/v3/index.json \
-              --skip-duplicate
-          done             

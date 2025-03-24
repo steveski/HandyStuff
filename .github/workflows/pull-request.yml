@@ -36,7 +36,7 @@ jobs:
 
       - name: Build
         working-directory: src
-        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.GitVersion_SemVer }}
+        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.semVer }}
 
       - name: Test and Collect Coverage
         working-directory: src
