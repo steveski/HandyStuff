@@ -40,7 +40,7 @@ jobs:
 
       - name: Build
         working-directory: src
-        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.NuGetVersion }}
+        run: dotnet build --configuration Release /p:Version=${{ steps.gitversion.outputs.GitVersion_SemVer }}
 
       - name: Test
         working-directory: src
