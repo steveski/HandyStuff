@@ -57,7 +57,7 @@ jobs:
 
       # Package and Publish
       - name: Pack
-        run: dotnet pack src/Crypto/Crypto.csproj --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.NuGetVersion }}
+        run: dotnet pack src/Crypto/Crypto.csproj --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.GitVersion_SemVer }}
 
       - name: Publish all NuGet packages
         run: |
