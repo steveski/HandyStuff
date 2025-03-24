@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <RootNamespace>au.steveski.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    <PackageId>au.steveski.$(AssemblyName)</PackageId>
+    <RootNamespace>steveski.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <PackageId>Steveski.$(AssemblyName)</PackageId>
   </PropertyGroup>
 
   <ItemGroup>

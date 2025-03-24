@@ -1,4 +1,4 @@
-﻿namespace au.steveski.Crypto;
+﻿namespace Steveski.Crypto;
 
 using System.Text;
 

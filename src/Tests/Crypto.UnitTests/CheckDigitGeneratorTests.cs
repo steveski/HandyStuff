@@ -1,4 +1,4 @@
-﻿namespace au.steveski.Crypto.UnitTests;
+﻿namespace Steveski.Crypto.UnitTests;
 
 using Shouldly;
 
