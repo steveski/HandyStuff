@@ -57,21 +57,25 @@ jobs:
 
       # Package and Publish
       - name: Pack
-        run: dotnet pack --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.NuGetVersion }}
+        run: dotnet pack src/Crypto/Crypto.csproj --configuration Release --no-build /p:PackageVersion=${{ steps.gitversion.outputs.NuGetVersion }}
 
-      - name: Publish to NuGet
-        run: dotnet nuget push "path/to/your/package.nupkg" \
-             --api-key ${{ secrets.NUGET_API_KEY }} \
-             --source https://api.nuget.org/v3/index.json
+      - name: Publish all NuGet packages
+        run: |
+          find . -name '*.nupkg' -print | while read pkg; do
+            echo "Publishing $pkg"
+            dotnet nuget push "$pkg" \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done
 
-      - name: Publish to MyGet
-        run: dotnet nuget push "path/to/your/package.nupkg" \
-             --api-key ${{ secrets.MYGET_API_KEY }} \
-             --source https://www.myget.org/F/your-feed/api/v3/index.json
+      # - name: Publish to MyGet
+      #   run: dotnet nuget push "path/to/your/package.nupkg" \
+      #        --api-key ${{ secrets.MYGET_API_KEY }} \
+      #        --source https://www.myget.org/F/your-feed/api/v3/index.json
 
 coverage:
   status:
     project:
       default:
         target: 100%   # Require 80% overall coverage
-          
